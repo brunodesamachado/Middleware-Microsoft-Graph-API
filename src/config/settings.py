@@ -35,10 +35,17 @@ class AppSettings(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def load_vault_secrets(cls, data):
-        if not vault or not isinstance(data, dict):
+        if not isinstance(data, dict):
             return data
         if "api_key" not in data:
-            data["api_key"] = vault.get_secret("API-KEY-MIDDLEWARE")
+            if vault:
+                try:
+                    data["api_key"] = vault.get_secret("API-KEY-MIDDLEWARE")
+                except Exception:
+                    pass
+            if "api_key" not in data:
+                if env_val := os.getenv("API_KEY_MIDDLEWARE"):
+                    data["api_key"] = env_val
         return data
 
 class AzureSettings(BaseModel):
@@ -52,18 +59,25 @@ class AzureSettings(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def load_vault_secrets(cls, data):
-        if not vault or not isinstance(data, dict):
+        if not isinstance(data, dict):
             return data
         secret_fields = {
-            "tenant_id": "TENANT-ID",
-            "client_id_sharepoint": "CLIENT-ID-SHAREPOINT",
-            "client_secret_sharepoint": "CLIENT-SECRET-SHAREPOINT",
-            "client_id_email": "CLIENT-ID-EMAIL",
-            "client_secret_email": "CLIENT-SECRET-EMAIL",
+            "tenant_id": ("TENANT-ID", "TENANT_ID"),
+            "client_id_sharepoint": ("CLIENT-ID-SHAREPOINT", "CLIENT_ID_SHAREPOINT"),
+            "client_secret_sharepoint": ("CLIENT-SECRET-SHAREPOINT", "CLIENT_SECRET_SHAREPOINT"),
+            "client_id_email": ("CLIENT-ID-EMAIL", "CLIENT_ID_EMAIL"),
+            "client_secret_email": ("CLIENT-SECRET-EMAIL", "CLIENT_SECRET_EMAIL"),
         }
-        for field_name, secret_name in secret_fields.items():
+        for field_name, (secret_name, env_name) in secret_fields.items():
             if field_name not in data:
-                data[field_name] = vault.get_secret(secret_name)
+                if vault:
+                    try:
+                        data[field_name] = vault.get_secret(secret_name)
+                    except Exception:
+                        pass
+                if field_name not in data:
+                    if env_val := os.getenv(env_name):
+                        data[field_name] = env_val
         return data
 
 class PathConfigBase(BaseModel):

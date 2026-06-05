@@ -8,7 +8,7 @@ Testa a camada de autenticação (X-API-Key):
 import pytest
 from fastapi.testclient import TestClient
 
-from conftest import TEST_API_KEY
+TEST_API_KEY = "test-api-key-middleware-12345"
 
 SP_PAYLOAD = {"site_name": "TI-Industrial", "drive_name": "Documentos"}
 

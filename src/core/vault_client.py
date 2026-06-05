@@ -33,7 +33,3 @@ class VaultClient:
             return secret.value.strip() if secret.value else secret.value
         except Exception as e:
             raise RuntimeError(f"Falha ao recuperar segredo '{secret_name}': {e}")
-
-# Instância Singleton para ser importada em outros módulos
-# Garante que a conexão e o cache sejam reutilizados
-vault_client = VaultClient()

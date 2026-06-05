@@ -132,7 +132,7 @@ A aplicação lê automaticamente os seguintes segredos do cofre configurado:
 
 ### Camada 3 — Identidade de Serviço (como o middleware acessa o Key Vault)
 
-**Ambiente de Desenvolvimento (Local)** — crie um `.env` na raiz do projeto:
+**Ambiente de Desenvolvimento com Azure** — crie um `.env` na raiz do projeto:
 
 ```ini
 KEY_VAULT_URL=https://nome-do-seu-cofre.vault.azure.net/
@@ -140,6 +140,22 @@ AZURE_TENANT_ID=seu_tenant_id
 AZURE_CLIENT_ID=seu_client_id
 AZURE_CLIENT_SECRET=sua_client_secret
 ```
+
+**Ambiente de Desenvolvimento sem Azure (fallback local)** — deixe `KEY_VAULT_URL` vazio e forneça os segredos diretamente no `.env`:
+
+```ini
+# KEY_VAULT_URL vazio = Key Vault ignorado, segredos lidos do .env
+KEY_VAULT_URL=
+
+API_KEY_MIDDLEWARE=minha-chave-local
+TENANT_ID=seu-tenant-id
+CLIENT_ID_SHAREPOINT=seu-client-id-sp
+CLIENT_SECRET_SHAREPOINT=seu-client-secret-sp
+CLIENT_ID_EMAIL=seu-client-id-email
+CLIENT_SECRET_EMAIL=seu-client-secret-email
+```
+
+> O servidor sobe normalmente neste modo. Endpoints que chamam o Microsoft Graph falharão com erro de autenticação, mas `/health` e o Swagger UI (`/docs`) funcionam sem restrições.
 
 **Ambiente de Produção (NSSM / Windows Service)** — não use `.env`. Cadastre as variáveis diretamente na aba **Environment** da configuração do serviço no NSSM:
 
