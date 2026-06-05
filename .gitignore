@@ -1,0 +1,46 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.ipynb
+*.egg-info/
+
+# Ambiente virtual
+venv/
+.venv/
+
+# Logs
+*.log
+logs/*
+!logs/.gitkeep
+
+# Segredos — nunca versionar
+.env
+
+# Cobertura de testes
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Linters / type checkers
+.mypy_cache/
+.ruff_cache/
+
+# IDEs
+.vscode/*
+.idea/
+
+# Build
+dist/
+build/
+
+# Dados locais gerados pela aplicação
+data/
+
+# Sistema operacional
+.DS_Store
+*.swp
+*.swo
+
+# Claude Code
+.claude/*

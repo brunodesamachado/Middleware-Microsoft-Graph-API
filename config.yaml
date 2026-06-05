@@ -1,0 +1,21 @@
+app:
+  api_port: 8001
+  api_producao: false
+  allowed_origins: ["*"]
+
+azure:
+  tenant_name: 'suaempresa.sharepoint.com'
+
+paths:
+  logs: logs
+  data:
+    input: data/input_data
+    output: data/output_data
+    backup: data/backup_data
+    results: data/results
+  src:
+    config: src/config
+    services: src/services
+    utils: src/utils
+    tests: src/tests
+    workflows: src/workflows
